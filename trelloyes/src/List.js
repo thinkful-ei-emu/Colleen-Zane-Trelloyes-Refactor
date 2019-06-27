@@ -9,9 +9,9 @@ function List (props) {
   key={card.id}
   title={card.title} 
   content={card.content}
-  deleteCard={()=>props.deleteCard(card.id)}
-  id={props.id}
-  listId={props.key}
+  deleteCard={props.deleteCard}
+  id={card.id}
+  
   />)
 
 return(
@@ -22,7 +22,7 @@ return(
     <div className='List-cards'>
       {cards}
     </div>
-  <button type="button" onClick={props.randomCard}>Add Random Card</button>
+  <button type="button" onClick={()=>{props.randomCard(props.id)}}>Add Random Card</button>
   </section>
   )
 }

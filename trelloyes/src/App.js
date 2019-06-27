@@ -4,7 +4,6 @@ import List from './List.js';
 import Store from './store';
 class App extends React.Component{
   state = Store
-  
 
    omit(obj, keyToOmit) {
     return Object.entries(obj).reduce(
@@ -14,24 +13,35 @@ class App extends React.Component{
     );
   }
 
-  
-      deleteCard = (card,listId)=> {
+  newRandomCard = () => { const id = Math.random().toString(36).substring(2, 4) 
+    + Math.random().toString(36).substring(2, 4); 
+    return { id, title: `RandomCard ${id}`, content: 'lorem ipsum', } } 
+
+
+      deleteCard = (id)=> {
+
+        const { allCards, lists} = this.state;
    
-    let newAllCards=this.omit(this.state.allCards,id)
-    let newLists=this.state.lists.map(list=>list.cardIds.filter(i=>id!==i))
-    console.log(id);
-    console.log(newLists);
-    
-    this.setState({
-      allCards:newAllCards,
-      lists:newLists,
-    })
-    
+        const newList=lists.map( list => ({
+          ...list,
+          cardIds : list.cardIds.filter(cardId => cardId!==id)
+          
+        }));
+        
+        const newCards=this.omit(allCards, id)
+          
+        this.setState({lists:newList, allCards:newCards})
+        
   }
 
-  handleRandomCard = () => {
-    console.log('handling random card')
-  }
+  handleRandomCard = (listId) => {
+    const newCard = this.newRandomCard();
+    const { allCards, lists } = this.state;
+    const newList = lists.map((list) => list.id === listId ? {...list, cardIds:[...list.cardIds, newCard.id ]}: list);
+    const newCards = {...allCards, [newCard.id]: newCard};
+    this.setState({lists:newList, allCards: newCards})
+}
+
   render(){
     
   //look through STORE.lists to get a list (object)
@@ -40,11 +50,11 @@ class App extends React.Component{
 
 
   const lists = this.state.lists.map((list)=> {
- 
-    return <List key={list.id} 
+    return <List key={list.id}
+  id = {list.id}    
   header={list.header}
   cards={list.cardIds.map((id)=>Store.allCards[id])}
-  deleteCard={()=>this.deleteCard(list.id)}
+  deleteCard={this.deleteCard}
   randomCard={this.handleRandomCard}
   />});
 
