@@ -1,16 +1,32 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import List from './List.js';
 import Store from './store';
 class App extends React.Component{
-  state = {
-    store : {Store}
+  state = Store
+  
+
+   omit(obj, keyToOmit) {
+    return Object.entries(obj).reduce(
+      (newObj, [key, value]) =>
+          key === keyToOmit ? newObj : {...newObj, [key]: value},
+      {}
+    );
   }
 
-  handleDeleteButton = (card)=> {
+  
+      deleteCard = (card,listId)=> {
+   
+    let newAllCards=this.omit(this.state.allCards,id)
+    let newLists=this.state.lists.map(list=>list.cardIds.filter(i=>id!==i))
+    console.log(id);
+    console.log(newLists);
     
-    console.log('handling delete')
+    this.setState({
+      allCards:newAllCards,
+      lists:newLists,
+    })
+    
   }
 
   handleRandomCard = () => {
@@ -23,11 +39,12 @@ class App extends React.Component{
   //this.allCards to display the card objects with matching cardIds
 
 
-  const lists = this.state.store.Store.lists.map((list)=> {
+  const lists = this.state.lists.map((list)=> {
+ 
     return <List key={list.id} 
   header={list.header}
   cards={list.cardIds.map((id)=>Store.allCards[id])}
-  deleteButton={this.handleDeleteButton}
+  deleteCard={()=>this.deleteCard(list.id)}
   randomCard={this.handleRandomCard}
   />});
 

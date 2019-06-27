@@ -1,16 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom'
 import Card from './Card';
 import './List.css';
 
 
 function List (props) {
-console.log(props);
+
   const cards=props.cards.map((card) => <Card 
   key={card.id}
   title={card.title} 
   content={card.content}
-  deleteButton={props.deleteButton}
+  deleteCard={()=>props.deleteCard(card.id)}
+  id={props.id}
+  listId={props.key}
   />)
 
 return(
