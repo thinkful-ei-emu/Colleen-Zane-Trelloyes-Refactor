@@ -5,13 +5,13 @@ import './List.css';
 
 function List (props) {
 
-  const cards=props.cards.map((card) => <Card 
+  let cards=props.cards.map((card) => 
+  <Card 
   key={card.id}
+  id={card.id}
   title={card.title} 
   content={card.content}
   deleteCard={props.deleteCard}
-  id={card.id}
-  
   />)
 
 return(
